@@ -14,6 +14,7 @@ Du kan välja mellan att bygga en ___ToDo___-applikation (se bild), en ___kontak
 ## Specifikation
 - Webbapplikation i Ruby med Sinatra och SQLite. Ni kan bygga en ToDo-applikation, Kontaktbok eller Inköpslista. Har ni andra liknande idéer så säg.
 - Individuellt projekt
+- Titta gärna på hur du gjorde (för att t.ex. skapa seeder-filen) i fruktprojektet.
 - Skapa en användare på Github med namnet: ntijoh-fornamn-efternamn.
 - Forka detta repot: https://github.com/ntijoh-ola-lindberg/wsp1-projekt2 och arbeta i de för ditt projekt.
 - I slutet på varje lektion lägger ni upp koden ni skrivit till ert Github-repo
