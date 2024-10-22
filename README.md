@@ -6,9 +6,14 @@ Nu är det dags för att bygga en applikation med hjälp av de tekniker vi har l
 
 Under projektet kommer vi ha genomgångar för fler tekniker som t.ex. inloggning och du kommer få hjälp med hur du kan göra utvecklingen/koden snyggare, bättre och lättare att hantera.
 
+Som projekt kan ni t.ex. bygga en app som hanterar TODOs.
+
+![Exempel på TODO applikation](docs/img/todo-app.png)  
+*Exempel på hur en TODO-applikation kan se ut*
+
 ## Specifikation
 - Webbapplikation i Ruby med Sinatra och SQLite
-- TODO-applikation, ...
+- TODO-applikation, Kontaktbok, Inköpslista
 - Individuellt projekt
 - Skapa en användare på Github med namnet: ntijoh-fornamn-efternamn.
 - Forka detta repot: https://github.com/ntijoh-ola-lindberg/wsp1-projekt2 och arbeta i de för ditt projekt.
