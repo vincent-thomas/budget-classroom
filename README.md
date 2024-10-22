@@ -1,18 +1,18 @@
 # Webbserverprogrammering 1 - Projekt #2
-Andra projektet i kursen Webbserverprogrammering 1
+Enskillt projekt under andra halvan av höstterminen 2024 i kursen Webbserverprogrammering 1 på NTI Johanneberg.
 
 ## Uppgiftsbeskrivning
-Nu är det dags för att bygga en applikation med hjälp av de tekniker vi har lärt oss i kursen Webbserverprogrammering. Syftet är att du ska lära dig att använda dina kunskaper för att bygga en webbapplikation med både front-end och back-end.
+Andra halvan av terminen kommer du att bygga en webbapplikation med av de tekniker vi har lärt oss i kursen Webbserverprogrammering.
 
-Under projektet kommer vi ha genomgångar för fler tekniker som t.ex. inloggning och du kommer få hjälp med hur du kan göra utvecklingen/koden snyggare, bättre och lättare att hantera.
+Under projektet kommer vi ha genomgångar för fler tekniker (som t.ex. inloggning). På vägen kommer du få kommer tips för hur du kan göra koden snyggare, bättre och lättare att hantera.
 
-Som projekt kan ni t.ex. bygga en app som hanterar TODOs.
+Du kan välja mellan att bygga en ___ToDo___-applikation (se bild), en ___kontaktbok___ eller en ___inköpslista___. Fråga om du har andra förslag på projekt.
 
-![Exempel på TODO applikation](docs/img/todo-app.png)  
-*Exempel på hur en TODO-applikation kan se ut*
+![Exempel på ToDo applikation](docs/img/todo-app.png)  
+*Exempel på hur en ToDo-applikation kan se ut*
 
 ## Specifikation
-- Webbapplikation i Ruby med Sinatra och SQLite. Ni kan bygga en TODO-applikation, Kontaktbok eller Inköpslista. Har ni andra liknande idéer så säg.
+- Webbapplikation i Ruby med Sinatra och SQLite. Ni kan bygga en ToDo-applikation, Kontaktbok eller Inköpslista. Har ni andra liknande idéer så säg.
 - Individuellt projekt
 - Skapa en användare på Github med namnet: ntijoh-fornamn-efternamn.
 - Forka detta repot: https://github.com/ntijoh-ola-lindberg/wsp1-projekt2 och arbeta i de för ditt projekt.
@@ -26,17 +26,19 @@ Som projekt kan ni t.ex. bygga en app som hanterar TODOs.
 
 ## Lektionsplanering
 
-| Vecka 	| Vad                                    	   |
-|-------	|--------------------------------------------|
-| 45     	| Projektbeskrivning + kom igång osv         |
-| 46     	| Korrigering projektbeskrivning + arbete    |
-| 47     	| Arbete                                 	   |
-| 48   	  | Arbete                              	     |
-| 49     	| Arbete                                 	   |
-| 50     	| Arbete                                 	   |
-| 51    	| Slutinlämning (_julavslutning  torsdagen_) |
+| Vecka 	| Vad                                    	    |
+|-------	|---------------------------------------------|
+| 45     	| Projektbeskrivning: ca 1/2 A4. Lägg i docs-mappen på Github.              |
+| 46     	| Korrigering projektbeskrivning + arbete     |
+| 47     	| Arbete                                 	    |
+| 48   	  | Arbete                              	      |
+| 49     	| Arbete                                 	    |
+| 50     	| Arbete                                 	    |
+| 49    	| Slutinlämning                               |
+| 50-51   | Feedback.  _Julavslutning  torsdagen v 51_. |
 
 ## Installation
 
-- Kör `bundle` (`bundle install` är samma sak) för att ladda ner de bibliotek som appen behöver
-- Kör `rake dev`för att starta appen
+- Ladda ner de biblotek (tex. SQLite) du behöver med `bundle` (eller `bundle install` som är samma sak)
+- Starta appen med `rake dev`
+- Kör seeder-filen med `rake seed`
