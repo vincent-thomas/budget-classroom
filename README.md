@@ -12,8 +12,7 @@ Som projekt kan ni t.ex. bygga en app som hanterar TODOs.
 *Exempel på hur en TODO-applikation kan se ut*
 
 ## Specifikation
-- Webbapplikation i Ruby med Sinatra och SQLite
-- TODO-applikation, Kontaktbok, Inköpslista
+- Webbapplikation i Ruby med Sinatra och SQLite. Ni kan bygga en TODO-applikation, Kontaktbok eller Inköpslista. Har ni andra liknande idéer så säg.
 - Individuellt projekt
 - Skapa en användare på Github med namnet: ntijoh-fornamn-efternamn.
 - Forka detta repot: https://github.com/ntijoh-ola-lindberg/wsp1-projekt2 och arbeta i de för ditt projekt.
