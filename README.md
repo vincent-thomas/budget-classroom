@@ -21,7 +21,6 @@ Du kan välja mellan att bygga en ___ToDo___-applikation (se bild), en ___kontak
 - Bjud in mig (ntijoh-ola-lindberg)
 - Ni skriver i loggboken varje vecka
 - Ni får feedback av mig genom hela projektet. Främst via loggbok och kanske via Github.
-- v.51 slutinlämning
 - Vid slutinlämning: Lämna in en liten film på classroom som visar applikationen
 - Bedömning: F/E enligt beskrivning: https://github.com/ntijoh/WTF24/blob/main/Bed%C3%B6mning%20Webbserver%201.md
 
