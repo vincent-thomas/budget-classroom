@@ -28,7 +28,7 @@ Du kan välja mellan att bygga en ___ToDo___-applikation (se bild), en ___kontak
 
 | Vecka 	| Vad                                    	    |
 |-------	|---------------------------------------------|
-| 45     	| Projektbeskrivning: ca 1/2 A4. Lägg i docs-mappen på Github.              |
+| 45     	| Projektbeskrivning: ca 1/2 A4. Lägg i loggboken.              |
 | 46     	| Korrigering projektbeskrivning + arbete     |
 | 47     	| Arbete                                 	    |
 | 48   	  | Arbete                              	      |
