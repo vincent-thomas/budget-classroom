@@ -1,4 +1,4 @@
-task :seed do 
+task :seed do
     require "bundler"
     Bundler.require
     require_relative 'db/seeder'

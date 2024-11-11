@@ -1,0 +1,15 @@
+
+<div>
+  <form method="POST" action="/lists/<%= @list_id %>/todos">
+    <input name="name" />
+  </form>
+</div>
+
+  <% @todos.each do |todo| %>
+    <li style="display: flex; gap: 1rem;">
+      <a href="/lists/<%= @list_id %>/todos/<%= todo['id'] %>"><%= todo['name'] %></a>
+      <form class="delete" action="/lists/<%= @list_id %>/todos/<%= todo['id'] %>/delete" method="post">
+        <input type="submit" value="Ta bort">
+      </form>
+    </li>
+  <% end %>
