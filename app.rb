@@ -1,14 +1,26 @@
+require 'date'
 class App < Sinatra::Base
     def db
       return @db if @db
 
-      @db = SQLite3::Database.new("db/fruits.sqlite")
+      @db = SQLite3::Database.new("db/db.sqlite")
       @db.results_as_hash = true
 
       return @db
     end
 
+    def require_auth(session_id)
+      result = db.execute("SELECT * FROM sessions WHERE id = ? JOIN users ON sessions.user_id = users.id;", [session_id])
+
+      p result
+
+      if result.length == 0
+        redirect "/auth/login"
+      end
+    end
+
     get '/lists' do
+      require_auth("testing")
       @lists = db.execute("SELECT * FROM todolists")
       erb(:"lists")
     end
@@ -36,7 +48,7 @@ class App < Sinatra::Base
 
       @list_id = list_id
 
-      @todos = db.execute('SELECT * from todos WHERE todolist_id = ?', [list_id])
+      @todos = db.execute('SELECT * from todos WHERE todolist_id = ? and done_at is NULL', [list_id])
       erb(:"todos")
     end
     get '/lists/:list_id/todos/:todo_id' do | list_id, todo_id |
@@ -67,6 +79,11 @@ class App < Sinatra::Base
       @list_id = list_id
       @todo = db.execute('UPDATE todos SET name = ? WHERE id = ?', [params["name"], todo_id])
       redirect "/lists/#{list_id}/todos/#{todo_id}"
+    end
+
+    post '/lists/:list_id/todos/:todo_id/done' do | list_id, todo_id |
+      db.execute('UPDATE todos SET done_at = ? WHERE id = ?', [DateTime.now.strftime("%Y-%m-%d %H:%M:%S"), todo_id])
+      redirect "/lists/#{list_id}/todos"
     end
 
     post '/api/account' do

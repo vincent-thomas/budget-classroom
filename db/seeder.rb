@@ -18,29 +18,36 @@ class Seeder
 
     db.execute('CREATE TABLE IF NOT EXISTS todolists (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id REFERENCES NOT NULL users(id),
                 name TEXT NOT NULL,
-                created_at DATETIME default current_timestamp
+                created_at DATETIME NOT NULL default current_timestamp
     )')
 
     db.execute('CREATE TABLE IF NOT EXISTS todos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 todolist_id INTEGER NOT NULL REFERENCES todolists(id),
                 name TEXT NOT NULL,
-                done_at INTEGER,
+                done_at DATETIME,
                 priority INTEGER,
-                deadline_at INTEGER,
-                created_at DATETIME default current_timestamp
+                deadline_at DATETIME,
+                created_at DATETIME NOT NULL default current_timestamp
     )')
 
-    db.execute('CREATE TABLE IF NOT EXISTS tags (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                thing_type TEXT NOT NULL,
-                thing_id TEXT NOT NULL,
-                name TEXT NOT NULL,
-                done_at INTEGER,
-                priority INTEGER,
-                deadline_at INTEGER,
-                created_at DATETIME default current_timestamp
+    db.execute('CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+      username TEXT NOT NULL,
+      hashed_password TEXT NOT NULL,
+
+      created_at DATETIME NOT NULL default current_timestamp
+    )')
+
+    db.execute('CREATE TABLE IF NOT EXISTS sessions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER REFERENCES users(id),
+
+      created_at DATETIME NOT NULL default current_timestamp,
+      valid_until DATETIME NOT NULL
     )')
   end
 
@@ -54,7 +61,7 @@ class Seeder
   private
   def self.db
     return @db if @db
-    @db = SQLite3::Database.new('db/fruits.sqlite')
+    @db = SQLite3::Database.new('db/db.sqlite')
     @db.results_as_hash = true
     @db
   end

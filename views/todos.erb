@@ -6,10 +6,19 @@
 </div>
 
   <% @todos.each do |todo| %>
-    <li style="display: flex; gap: 1rem;">
-      <a href="/lists/<%= @list_id %>/todos/<%= todo['id'] %>"><%= todo['name'] %></a>
-      <form class="delete" action="/lists/<%= @list_id %>/todos/<%= todo['id'] %>/delete" method="post">
-        <input type="submit" value="Ta bort">
+    <li style="display: flex; gap: 1rem; align-items: center; padding: 0.25rem;">
+    <% if @list_id["done_at"] == nil %>
+      <form class="delete" action="/lists/<%= @list_id %>/todos/<%= todo['id'] %>/done" method="post">
+        <button type="submit" class="done-btn">
+          <img src="/radio-check.svg" />
+        </button>
+      </form>
+<% else %>
+ <div class="two">something else</div>
+<% end %>
+      <a href="/lists/<%= @list_id %>/todos/<%= todo['id'] %>" style="text-decoration: none; color: black; font-style: semibold"><%= todo['name'] %></a>
+      <form class="delete" action="/lists/<%= @list_id %>/todos/<%= todo['id'] %>/delete" method="post" style="display: flex; justify-content: center; align-items: center;">
+        <button type="submit" style="border: none; background-color: red; padding: 0.5rem 0.75rem; color: white; border-radius: 0.75rem; font-weight: semibold;">Ta bort</button>
       </form>
     </li>
   <% end %>

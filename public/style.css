@@ -14,3 +14,21 @@ body {
 .back-button:hover {
   background-color: rgba(0,0,0,0.05);
 }
+
+
+.done-btn {
+  background-color: transparent;
+  border-radius: 100%;
+  padding: 0.5rem;
+
+  cursor: pointer;
+
+  border: none;
+
+  height: 40px;
+  width: 40px;
+}
+
+.done-btn:hover {
+  background-color: rgba(0,0,0,0.05);
+}
