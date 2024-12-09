@@ -1,5 +1,15 @@
 require 'date'
+require 'securerandom'
+
+def create_session(user_id)
+  session_id = SecureRandom.uuid()
+  valid_until = Time.now.strftime("%Y-%m-%d %H:%M:%S")
+  db.execute("INSERT INTO sessions (id, user_id, valid_until) VALUES (?,?,?)", [session_id, user_id, valid_until])
+  return session_id
+end
+
 class App < Sinatra::Base
+    use Rack::Session::Cookie, key: 'session_id', path: '/', secret: "30b68d806425e1e933f8af04afb49a33f3d5961a9eb2ed8d7877134bc273e033"
     def db
       return @db if @db
 
@@ -10,23 +20,42 @@ class App < Sinatra::Base
     end
 
     def require_auth(session_id)
-      result = db.execute("SELECT * FROM sessions WHERE id = ? JOIN users ON sessions.user_id = users.id;", [session_id])
+      p session_id
+      result = db.execute("SELECT * FROM sessions JOIN users ON sessions.user_id = users.id WHERE sessions.id = ?;", [session_id])
 
       p result
 
       if result.length == 0
         redirect "/auth/login"
       end
+
+      valid_until = DateTime.strptime(result[0]["valid_until"], "%Y-%m-%d %H:%M:%S")
+
+      p valid_until, DateTime.now()
+
+      if valid_until < DateTime.now()
+        redirect "/auth/login"
+      end
+
+      return result[0]
+    end
+    def require_noauth(session_id, path)
+      result = db.execute("SELECT * FROM sessions JOIN users ON sessions.user_id = users.id WHERE sessions.id = ?;", [session_id])
+
+      if result.length != 0
+        redirect path
+      end
     end
 
     get '/lists' do
-      require_auth("testing")
+      require_auth(session[:token])
       @lists = db.execute("SELECT * FROM todolists")
       erb(:"lists")
     end
     post '/lists' do
-
-      @lists = db.execute("INSERT INTO todolists (name) VALUES (?)", [params["name"]])
+      user = require_auth(session[:token])
+      p user
+      @lists = db.execute("INSERT INTO todolists (name, user_id) VALUES (?, ?)", [params["name"], user["user_id"]])
       redirect "/lists"
     end
 
@@ -96,4 +125,51 @@ class App < Sinatra::Base
 
     end
 
+
+
+   get '/auth/login' do
+     erb(:"auth/login")
+   end
+   get '/auth/register' do
+    erb(:"auth/register")
+   end
+    post '/api/auth/login' do
+      username = params[:username]
+      password = params[:password]
+
+      user = db.execute("SELECT * FROM users WHERE username = ?", [username]).first
+
+      if user == nil
+        redirect "/auth/login?wrong=true"
+      end
+
+      p user["hashed_password"], password, username
+
+      valid_password = Argon2::Password.verify_password(password, user["hashed_password"])
+
+      if !valid_password
+        redirect "/auth/login?wrong=true"
+      end
+
+      session[:token] = create_session(user["id"])
+
+      redirect "/lists"
+    end
+    post '/api/auth/register' do
+      username = params[:username]
+      password = params[:password]
+      p password
+      hashed_password = Argon2::Password.create(password)
+
+      user_id = SecureRandom.uuid()
+
+      result = db.execute("INSERT INTO users (id, username, hashed_password) VALUES (?,?,?)", [user_id, username, hashed_password]).first
+      p user_id
+
+      session[:token] = create_session(user_id)
+
+      redirect "/lists"
+    end
 end
+
+
