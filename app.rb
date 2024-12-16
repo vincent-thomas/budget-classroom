@@ -48,9 +48,9 @@ class App < Sinatra::Base
     end
 
     get '/lists' do
-      require_auth(session[:token])
+      @user = require_auth(session[:token])
       @lists = db.execute("SELECT * FROM todolists")
-      erb(:"lists")
+      erb(:"authed/lists" , layout: :"authed/layout")
     end
     post '/lists' do
       user = require_auth(session[:token])
@@ -74,19 +74,22 @@ class App < Sinatra::Base
 
     get '/lists/:list_id/todos' do |list_id|
       name = params["name"]
+      @user = require_auth(session[:token])
 
       @list_id = list_id
 
       @todos = db.execute('SELECT * from todos WHERE todolist_id = ? and done_at is NULL', [list_id])
-      erb(:"todos")
+      erb(:"authed/todos" , layout: :"authed/layout")
     end
     get '/lists/:list_id/todos/:todo_id' do | list_id, todo_id |
-      list = db.execute("SELECT * FROM todolists WHERE id = ?", [list_id.to_i])
-      todos = db.execute('SELECT * FROM todos WHERE id = ?', [todo_id.to_i])
+      @user = require_auth(session[:token])
+      list = db.execute("SELECT * FROM todolists WHERE id = ? AND user_id = ?", [list_id.to_i, @user["user_id"]])
 
       if list.length == 0
         redirect "/lists"
       end
+
+      todos = db.execute("SELECT * FROM todos WHERE todolist_id = ?", [list_id.to_i])
 
       if todos.length == 0
         redirect "/lists/#{list_id}/todos"
@@ -95,7 +98,7 @@ class App < Sinatra::Base
       @todo = todos[0]
       @list = list[0]
 
-      erb(:"one_todo")
+      erb :"authed/one_todo" , layout: :"authed/layout"
     end
 
     post '/lists/:list_id/todos/:todo_id/delete' do | list_id, todo_id |
@@ -119,10 +122,6 @@ class App < Sinatra::Base
 
       email = params["email"]
       password = params["password"]
-
-      p email, password
-
-
     end
 
 
@@ -145,7 +144,10 @@ class App < Sinatra::Base
 
       p user["hashed_password"], password, username
 
-      valid_password = Argon2::Password.verify_password(password, user["hashed_password"])
+      hashed_password = user["hashed_password"]
+      p hashed_password
+
+      valid_password = Argon2::Password.verify_password(password, hashed_password)
 
       if !valid_password
         redirect "/auth/login?wrong=true"
