@@ -11,3 +11,4 @@ db/*.sqlite
 # Windows
 Thumbs.db
 .direnv
+node_modules

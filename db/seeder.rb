@@ -1,4 +1,6 @@
 require 'sqlite3'
+require 'securerandom'
+require_relative '../server/argon2'
 
 class Seeder
 
@@ -9,41 +11,55 @@ class Seeder
   end
 
   def self.drop_tables
-    db.execute('DROP TABLE IF EXISTS users')
-    db.execute('DROP TABLE IF EXISTS todolists')
-    db.execute('DROP TABLE IF EXISTS todos')
+    db.execute('DROP TABLE IF EXISTS rooms')
+    db.execute('DROP TABLE IF EXISTS room_invites')
+    db.execute('DROP TABLE IF EXISTS pupils')
+    db.execute('DROP TABLE IF EXISTS teachers')
+    db.execute('DROP TABLE IF EXISTS sessions')
   end
 
   def self.create_tables
 
-    db.execute('CREATE TABLE IF NOT EXISTS todolists (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id REFERENCES users(id) NOT NULL,
+    db.execute('CREATE TABLE IF NOT EXISTS rooms (
+                id INTEGER PRIMARY KEY,
                 name TEXT NOT NULL,
-                created_at DATETIME NOT NULL default current_timestamp
+
+                created_at DATETIME NOT NULL default current_timestamp,
+                archived_at DATETIME
     )')
 
-    db.execute('CREATE TABLE IF NOT EXISTS todos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                todolist_id INTEGER NOT NULL REFERENCES todolists(id),
-                name TEXT NOT NULL,
-                done_at DATETIME,
-                priority INTEGER,
-                deadline_at DATETIME,
-                created_at DATETIME NOT NULL default current_timestamp
+    # user_id is null the invite has not been used
+    db.execute('CREATE TABLE IF NOT EXISTS room_invites (
+      id INTEGER PRIMARY KEY,
+      room_id TEXT NOT NULL REFERENCES rooms(id),
+      user_id TEXT,
+      is_teacher INTEGER NOT NULL,
+
+      created_at DATETIME NOT NULL default current_timestamp
     )')
 
-    db.execute('CREATE TABLE IF NOT EXISTS users (
+    db.execute('CREATE TABLE IF NOT EXISTS teachers (
       id TEXT PRIMARY KEY,
 
       username TEXT NOT NULL,
+      email TEXT NOT NULL,
+      hashed_password TEXT NOT NULL,
+
+      created_at DATETIME NOT NULL default current_timestamp
+    )')
+
+    db.execute('CREATE TABLE IF NOT EXISTS pupils (
+      id TEXT PRIMARY KEY,
+
+      username TEXT NOT NULL,
+      email TEXT NOT NULL,
       hashed_password TEXT NOT NULL,
 
       created_at DATETIME NOT NULL default current_timestamp
     )')
 
     db.execute('CREATE TABLE IF NOT EXISTS sessions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id INTEGER PRIMARY KEY,
       user_id INTEGER REFERENCES users(id),
 
       created_at DATETIME NOT NULL default current_timestamp,
@@ -52,10 +68,22 @@ class Seeder
   end
 
   def self.populate_tables
-    # db.execute('INSERT INTO fruits (name, tastiness, description) VALUES ("Äpple",   7, "En rund frukt som finns i många olika färger.")')
-    # db.execute('INSERT INTO fruits (name, tastiness, description) VALUES ("Päron",    6, "En nästan rund, men lite avläng, frukt. Oftast mjukt fruktkött.")')
-    # db.execute('INSERT INTO fruits (name, tastiness, description) VALUES ("Banan",  4, "En avlång gul frukt.")')
-    # db.execute('INSERT INTO fruits (name, tastiness, description) VALUES ("Mango",  9, "En god (kanske) frukt med jobbig kärna i mitten.")')
+
+    password = hash_password("password123")
+
+    db.execute('INSERT INTO teachers (id,username,email,hashed_password) VALUES (?,?,?,?)', [
+      SecureRandom.uuid,
+      "teacher",
+      "teacher@gmail.com",
+      password
+    ])
+
+    db.execute('INSERT INTO pupils (id,username,email,hashed_password) VALUES (?,?,?,?)', [
+      SecureRandom.uuid,
+      "pupil",
+      "pupil@gmail.com",
+      password
+    ])
   end
 
   private

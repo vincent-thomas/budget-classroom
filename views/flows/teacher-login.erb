@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/styles.css">
+  </head>
+  <body>
+    <form action="/flows/teacher-login" method="POST">
+      <label className="flex flex-col gap-2">
+        <span>Email:</span>
+        <input type="email" name="email" />
+      </label>
+      <label className="flex flex-col gap-2">
+        <span>Password:</span>
+        <input type="password" minlength="8" maxlength="99" name="password" />
+      </label>
+      <button type="submit" class="px-3 py-2 rounded cursor-pointer">Submit</button>
+    </form>
+  </body>
+</html>
+

@@ -1,0 +1,4 @@
+[[database]]
+Name = 'db'
+Provider = 'sqlite'
+URL = 'file:./db/db.sqlite'

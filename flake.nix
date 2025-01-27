@@ -41,6 +41,12 @@
             packages = with pkgs; [
               ruby
               rubyPackages.rake
+
+              just
+
+              lazygit
+
+              pnpm_9
             ];
           };
         }
