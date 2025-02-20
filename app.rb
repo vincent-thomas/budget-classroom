@@ -3,17 +3,10 @@ require 'securerandom'
 
 require_relative './server/argon2'
 require_relative './server/session'
+require_relative './server/db'
 
 
-class App < Sinatra::Base
-    def db
-      return @db if @db
-
-      @db = SQLite3::Database.new("db/db.sqlite")
-      @db.results_as_hash = true
-
-      return @db
-    end
+class App < Sinatra::Application
 
     def require_pupil_auth(session)
 
@@ -47,23 +40,26 @@ class App < Sinatra::Base
     end
 
     get "/classes" do
-      this = validate_any_session(session)
+      # this = validate_any_session(session)
+      #
+      # if this == nil
+      #   redirect "/flows/teacher-login"
+      # end
 
-      if this == nil
-        redirect "/flows/teacher-login"
-      end
-
-      p this
-      return "nice"
+      erb :home
     end
 
-    get "/flows/teacher-login" do
-      this = validate_teacher_session(session)
-      if this != nil
-        session = nil
-      end
-      erb :"flows/teacher-login"
+    get "/classes/new" do
+      erb :new
     end
+
+    # get "/flows/teacher-login" do
+    #   this = validate_teacher_session(session)
+    #   if this != nil
+    #     session = nil
+    #   end
+    #   erb :"flows/teacher-login"
+    # end
 
     post "/flows/teacher-login" do
 
@@ -77,19 +73,16 @@ class App < Sinatra::Base
         redirect "/flows/teacher-login?wrong_credentials=true"
       end
 
-
       teacher = teachers[0]
       is_valid_password = compare_password(password, teacher["hashed_password"])
-
-      p is_valid_password
 
       if !is_valid_password
         redirect "/flows/teacher-login?wrong_credentials=true"
       end
       p session
       session_data = create_teacher_session(teacher["id"])
-      session[:user_id] = session_data[:user_id]
-      session[:type] = session_data[:type]
+      session[:user_id] = session_data["user_id"]
+      session[:type] = session_data["type"]
       redirect "/classes"
     end
 
@@ -98,16 +91,7 @@ class App < Sinatra::Base
       student = require_pupil_auth(session)
 
       p student
-      # # TODO: teacher session id into database as teacher in classroom.
-      # p params
-      #
-      # name = params["name"]
-      #
-      # returned = db.execute("SELECT FROM rooms *", [name])
-      #
-      # p returned
-      #
-      # status 200
+      status 200
     end
 
 
@@ -146,4 +130,4 @@ class App < Sinatra::Base
     end
 end
 
-
+require_relative 'routes/flows-teacher-auth.rb'

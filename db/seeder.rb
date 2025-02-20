@@ -21,7 +21,7 @@ class Seeder
   def self.create_tables
 
     db.execute('CREATE TABLE IF NOT EXISTS rooms (
-                id INTEGER PRIMARY KEY,
+                id TEXT PRIMARY KEY,
                 name TEXT NOT NULL,
 
                 created_at DATETIME NOT NULL default current_timestamp,
@@ -58,13 +58,16 @@ class Seeder
       created_at DATETIME NOT NULL default current_timestamp
     )')
 
-    db.execute('CREATE TABLE IF NOT EXISTS sessions (
-      id INTEGER PRIMARY KEY,
-      user_id INTEGER REFERENCES users(id),
+    db.execute("CREATE TABLE IF NOT EXISTS sessions (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      TEXT INTEGER REFERENCES users(id),
+
+      type TEXT CHECK( type IN ('teacher','pupil') ) NOT NULL,
 
       created_at DATETIME NOT NULL default current_timestamp,
-      valid_until DATETIME NOT NULL
-    )')
+      valid_until INTEGER NOT NULL
+    )")
   end
 
   def self.populate_tables

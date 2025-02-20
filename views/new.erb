@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/styles.css">
+  </head>
+  <body class="h-screen grid grid-rows-[auto_1fr_auto]">
+    <header class="flex justify-between w-full py-3 px-4 border-b border-1">
+      <h1 class="text-lg font-semibold italic italic">Budget classroom</h1>
+      <nav class="flex gap-4 items-center">
+        <button class="rounded-full hover:bg-gray-200 p-1">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <a rel="preload" href="/profile">
+          <img
+            src="https://lh3.googleusercontent.com/ogw/AF2bZygWcZbwkt65qQ9ed_srE5Xfft8FTMoUquLKSaBCwWNLTw=s32-c-mo"
+            width="40"
+            height="40"
+            class="rounded-full"
+          >
+        </a>
+      </nav>
+    </header>
+    <main class="p-3 overflow-scroll flex justify-center items-center">
+      <div class="flex gap-3 flex-col items-center">
+        <div class="border p-4 gap-5 rounded-lg max-w-[400px] w-full">
+          <h1 class="text-2xl">
+            Join new classroom
+          </h1>
+          <span class="">A teacher needs to provide you<br>with a code to enter their class.</span>
+          <form class="flex flex-col gap-4">
+            <label class="flex flex-col gap-1">
+              Class code:
+              <input placeholder="Enter code...">
+            </label>
+            <button>Join class</button>
+          </form>
+        </div>
+        <p>Teacher needs to accept you first</p>
+      </div>
+    </main>
+    <footer class="flex justify-between p-2 border-t">
+      <span>Created by <a href="https://v-thomas.com/github" class="italic underline">Vincent Thomas</a></span>
+    </footer>
+  </body>
+</html>
+
