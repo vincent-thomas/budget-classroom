@@ -6,7 +6,17 @@ require_relative './server/session'
 require_relative './server/db'
 
 
+helpers do
+  def render_component(template, locals = {})
+    erb template, layout: false, views: "components", locals: locals
+  end
+end
+
 class App < Sinatra::Application
+    use Rack::Session::Cookie, key: 'rack.session',
+      path: '/',
+      secret: '4e22fb6f1568342b3cc46a3206086cf8aca44398651a1b1797b3fe727b05da58'
+
 
     def require_pupil_auth(session)
 
@@ -22,15 +32,11 @@ class App < Sinatra::Application
 
       result = db.execute("SELECT * FROM sessions JOIN pupils ON pupil_sessions.user_id = users.id WHERE pupil_sessions.id = ?;", [session_id])
 
-      p result
-
       if result.length == 0
         redirect "/auth/login"
       end
 
       valid_until = DateTime.strptime(result[0]["valid_until"], "%Y-%m-%d %H:%M:%S")
-
-      p valid_until, DateTime.now()
 
       if valid_until < DateTime.now()
         redirect "/auth/login"
@@ -39,58 +45,12 @@ class App < Sinatra::Application
       return result[0]
     end
 
-    get "/classes" do
-      # this = validate_any_session(session)
-      #
-      # if this == nil
-      #   redirect "/flows/teacher-login"
-      # end
 
-      erb :home
-    end
-
-    get "/classes/new" do
-      erb :new
-    end
-
-    # get "/flows/teacher-login" do
-    #   this = validate_teacher_session(session)
-    #   if this != nil
-    #     session = nil
-    #   end
-    #   erb :"flows/teacher-login"
-    # end
-
-    post "/flows/teacher-login" do
-
-      email = params[:email]
-      password = params[:password]
-
-      teachers = db.execute("SELECT * FROM teachers WHERE email = ?", [email])
-
-
-      if teachers.length == 0
-        redirect "/flows/teacher-login?wrong_credentials=true"
-      end
-
-      teacher = teachers[0]
-      is_valid_password = compare_password(password, teacher["hashed_password"])
-
-      if !is_valid_password
-        redirect "/flows/teacher-login?wrong_credentials=true"
-      end
-      p session
-      session_data = create_teacher_session(teacher["id"])
-      session[:user_id] = session_data["user_id"]
-      session[:type] = session_data["type"]
-      redirect "/classes"
-    end
 
     # STUDENT API
     get "/api/rooms" do
       student = require_pupil_auth(session)
 
-      p student
       status 200
     end
 
@@ -98,13 +58,11 @@ class App < Sinatra::Application
     # TEACHER API
     post "/api/rooms" do
       # TODO: teacher session id into database as teacher in classroom.
-      p params
 
       name = params["name"]
 
       returned = db.execute("INSERT INTO rooms (name) VALUES (?)", [name])
 
-      p returned
 
       status 200
     end
@@ -131,3 +89,4 @@ class App < Sinatra::Application
 end
 
 require_relative 'routes/flows-teacher-auth.rb'
+require_relative 'routes/classes.rb'

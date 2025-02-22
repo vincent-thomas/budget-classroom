@@ -47,6 +47,7 @@
               lazygit
 
               pnpm_9
+              sqlitebrowser
             ];
           };
         }
