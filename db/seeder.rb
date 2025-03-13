@@ -29,11 +29,16 @@ class Seeder
     )')
 
     # user_id is null the invite has not been used
+    # INVITE_STATE:
+    # 0 - is pending
+    # 1 - is accepted
+    # 2 - is declined
+    # 3 - is teacher
     db.execute('CREATE TABLE IF NOT EXISTS room_invites (
-      id INTEGER PRIMARY KEY,
+      id TEXT PRIMARY KEY,
       room_id TEXT NOT NULL REFERENCES rooms(id),
       user_id TEXT,
-      is_teacher INTEGER NOT NULL,
+      invite_state INTEGER NOT NULL,
 
       created_at DATETIME NOT NULL default current_timestamp
     )')
