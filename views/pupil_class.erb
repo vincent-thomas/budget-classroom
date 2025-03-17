@@ -2,7 +2,6 @@
 <html>
   <head>
     <link rel="stylesheet" href="/css/styles.css">
-    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   </head>
   <body class="h-screen grid grid-rows-[auto_1fr_auto]">
     <header class="flex justify-between w-full py-3 px-4 border-b border-1">
@@ -67,6 +66,18 @@
       </div>
     </main>
     <%= render_component :footer %>
+    <main class="">
+      <div class="max-w-[800px] mx-auto px-3 flex flex-col gap-4">
+        <div class="bg-blue-500 p-4">
+          <h2 class="text-white text-lg font-semibold">Classroom <%= @room["name"] %></h2>
+          <p class="text-white text-lg font-semibold">Created at <%= @room["created_at"] %></p>
+        </div>
+      </div>
+    </main>
+    <%= render_component :footer %>
+    <footer class="flex justify-between p-2 border-t">
+      <span>Created by <a href="https://v-thomas.com/github" class="italic underline">Vincent Thomas</a></span>
+    </footer>
   </body>
 </html>
 

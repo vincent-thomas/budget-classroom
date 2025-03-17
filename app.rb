@@ -89,4 +89,5 @@ class App < Sinatra::Application
 end
 
 require_relative 'routes/flows-auth.rb'
+require_relative 'routes/auth.rb'
 require_relative 'routes/classes.rb'
