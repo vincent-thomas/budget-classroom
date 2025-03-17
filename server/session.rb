@@ -22,7 +22,6 @@ def create_pupil_session(user_id)
 end
 
 def validate_session(session_id)
-  p "trying to validate session with id: #{session_id}"
   sessions = db.execute("SELECT * FROM sessions WHERE id=?", [session_id])
 
   p "nice sessions #{sessions}"
@@ -34,11 +33,12 @@ def validate_session(session_id)
 
   session = sessions[0]
 
-  p "validate session with found id: #{session["id"]}"
-
   if session["valid_until"] < Time.now.to_i
     return nil
   end
 
-  return session["user_id"]
+  return {
+    "user_id" => session["user_id"],
+    "type" => session["type"]
+  }
 end

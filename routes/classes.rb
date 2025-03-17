@@ -23,6 +23,21 @@ def get_class_pupil(session_id, room_id)
   erb :pupil_class
 end
 
+def get_classes_teacher(session_id)
+  result = db.execute("SELECT * FROM room_invites WHERE user_id = ? AND invite_state = 3")
+
+  # result = db.execute("SELECT *
+  #   FROM rooms
+  #   JOIN room_invites ON rooms.id = room_invites.room_id
+  #   WHERE room_invites.user_id = ? AND room_invites.invite_state = 3",
+  # [session_id])
+
+  puts "nice result"
+  p result
+
+  erb :teacher_classes
+end
+
 class App < Sinatra::Application
   namespace "/classes" do
     get "/create" do
@@ -62,7 +77,7 @@ class App < Sinatra::Application
     end
 
     get "/:room_id" do |room_id|
-      this_session = validate_session(session[:id].to_s)
+      this_session = validate_session(session[:user_id].to_s)
 
       if this_session == nil
         session.clear()
@@ -70,7 +85,7 @@ class App < Sinatra::Application
       end
 
       if this_session["type"] == "pupil"
-        return get_class_pupil(this_session[:id].to_s, room_id)
+        return get_class_pupil(this_session[:user_id], room_id)
       end
 
       status 200
@@ -101,9 +116,10 @@ class App < Sinatra::Application
 
       case user_type
       when "teacher"
-        get_classes_teacher(session[:id].to_s)
+        p "USER_ID", this_session
+        get_classes_teacher(this_session[:user_id])
       when "pupil"
-        get_classes_pupil(session[:id].to_s)
+        get_classes_pupil(this_session[:user_id])
       else
         session.clear()
         puts "REDIRECT 2"

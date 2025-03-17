@@ -48,11 +48,9 @@ class App < Sinatra::Application
         redirect "/flows/pupil-login?wrong_credentials=true"
       end
 
-      session_id = create_pupil_session(teacher["id"])
-
-      session[:id] = session_id
-
+      session[:id] = create_pupil_session(teacher["id"])
       session[:type] = "pupil"
+
       redirect "/classes"
     end
 
@@ -92,11 +90,7 @@ class App < Sinatra::Application
         redirect "/flows/teacher-login?wrong_credentials=true"
       end
 
-      session_id = create_teacher_session(teacher["id"])
-
-      session[:id] = session_id
-
-      p "nice session id at login: #{session[:id]}"
+      session[:id] = create_teacher_session(teacher["id"])
       session[:type] = "teacher"
       redirect "/classes"
     end
