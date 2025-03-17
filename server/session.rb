@@ -1,4 +1,3 @@
-
 require_relative './db.rb'
 
 # Returns the session id
@@ -7,7 +6,7 @@ def internal_create_session(type, user_id)
 
   date = Time.now.to_i + 86_400
 
-  db.execute("INSERT INTO sessions (id,user_id,type,valid_until) VALUES (?,?,?,?)", [id, user_id, type, date])
+  db.execute("INSERT INTO sessions (id, user_id, type, valid_until) VALUES (?,?,?,?)", [id, user_id, type, date])
 
   return id
 end
@@ -41,5 +40,5 @@ def validate_session(session_id)
     return nil
   end
 
-  return session
+  return session["user_id"]
 end

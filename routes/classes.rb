@@ -2,7 +2,8 @@ require 'sinatra'
 require 'sinatra/namespace'
 require 'securerandom'
 
-require_relative '../server/session.rb'
+require_relative '../server/db'
+require_relative '../server/session'
 
 def get_classes_pupil(session_id, room_id)
   puts room_id, session_id
@@ -105,12 +106,46 @@ class App < Sinatra::Application
         get_classes_pupil(session[:id].to_s)
       else
         session.clear()
+        puts "REDIRECT 2"
         redirect "/flows/pupil-login"
       end
     end
 
+    get "/:class_id" do |id|
+      @class_id = id
+      @posts = [
+        {
+          "post_id" => "nice_post",
+          "user_id" => "teacher_id",
+          "type" => "teacher",
+          "name" => "very nice upgift"
+        }
+      ]
+
+      erb :pupil_class
+    end
+
     get "/new" do
       erb :new
+    end
+  end
+
+  namespace "/api/classes" do
+    get "" do
+      this_session = validate_session(session[:id].to_s)
+
+      if this_session == nil
+        status 401
+        return "Unauthorized"
+      end
+
+      p "SESSION", this_session
+
+      user_id = this_session["user_id"]
+
+      get_user_rooms(user_id)
+
+      status 200
     end
   end
 end
