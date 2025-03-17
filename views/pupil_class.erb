@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  </head>
+  <body class="h-screen grid grid-rows-[auto_1fr_auto]">
+    <header class="flex justify-between w-full py-3 px-4 border-b border-1">
+      <h1 class="text-lg font-semibold italic italic">Budget classroom</h1>
+      <nav class="flex gap-4 items-center">
+        <a class="rounded-full hover:bg-gray-200 p-1" href="/classes/new">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+              fill="currentColor"
+            />
+          </svg>
+        </a>
+        <a rel="preload" href="/profile">
+          <img
+            src="https://lh3.googleusercontent.com/ogw/AF2bZygWcZbwkt65qQ9ed_srE5Xfft8FTMoUquLKSaBCwWNLTw=s32-c-mo"
+            width="40"
+            height="40"
+            class="rounded-full"
+          >
+        </a>
+      </nav>
+    </header>
+    <main class="p-3">
+      <div class="max-w-[800px] mx-auto w-full flex flex-col gap-3">
+        <div>
+          <section class="rounded-xl flex flex-col gap-3 bg-blue-400 p-6 rounded-b-none border">
+            <h1 class="text-4xl font-semibold text-white">Kemi</h1>
+            <p class="text-sm text-white">testing nice descritiopn</p>
+            <p class="text-md mt-auto text-white">Niklas börjesson</p>
+          </section>
+          <form id="myForm" class="items-end border rounded-xl rounded-t-none border-t-0 flex w-full justify-between" method="POST" action="/classes/<%= @class_id %>/messages/student">
+            <textarea style="resize: none" id="myTextarea" oninput="resizeForm()" placeholder="Skriv en kommentar" name="comment" class="placeholder:text-gray-900 p-3 flex-grow focus:outline-0" rows="auto"></textarea>
+            <div class="p-1">
+              <button type="submit" class="p-3 text-black font-semibold rounded-full hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="black"><path d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Zm0 0v-400 400Z"/></svg>
+              </button>
+            </div>
+          </form>
+          <script>
+            function resizeForm() {
+              const textarea = document.getElementById("myTextarea");
+              textarea.style.height = "auto"; // Reset height
+              textarea.style.height = textarea.scrollHeight + "px"; // Set new height
+            }
+          </script>
+        </div>
+        <% @posts.each do |post| %>
+          <a class="border rounded-lg p-3 flex gap-3 items-center" href="/classes/<% @class_id %>/posts/<% post["post_id"] %>">
+            <div class="p-3 rounded-full bg-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm80-80h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm200-190q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z"/></svg>
+            </div>
+            <p>Upgift upplagd av <%= post["teacher_name"] %>: <% post["name"] %></p>
+          </a>
+        <% end %>
+      </div>
+    </main>
+    <%= render_component :footer %>
+  </body>
+</html>
+

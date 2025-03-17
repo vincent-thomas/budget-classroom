@@ -4,6 +4,7 @@ require 'securerandom'
 require_relative './server/argon2'
 require_relative './server/session'
 require_relative './server/db'
+require_relative './server/rooms.rb'
 
 
 helpers do
@@ -67,9 +68,8 @@ class App < Sinatra::Application
       status 200
     end
 
-    post "/api/rooms/:room_id/invites" do
-      room_id = params.room_id
 
+    post "/api/rooms/:room_id/invites" do |room_id|
       body = JSON.parse(request.body.read)
 
       classroom_id = body["classroom_id"]
@@ -88,5 +88,5 @@ class App < Sinatra::Application
     end
 end
 
-require_relative 'routes/flows-teacher-auth.rb'
+require_relative 'routes/flows-auth.rb'
 require_relative 'routes/classes.rb'
