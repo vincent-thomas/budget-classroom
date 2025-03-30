@@ -41,5 +41,6 @@ def validate_session(session_id)
     return nil
   end
 
+
   return session
 end

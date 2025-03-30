@@ -28,6 +28,38 @@ class Seeder
                 archived_at DATETIME
     )')
 
+    db.execute('CREATE TABLE IF NOT EXISTS room_items (
+                id TEXT PRIMARY KEY,
+                room_id TEXT NOT NULL REFERENCES rooms(id),
+                title TEXT NOT NULL,
+                description TEXT NOT NULL,
+
+                created_at DATETIME NOT NULL default current_timestamp,
+                archived_at DATETIME
+    )')
+
+    db.execute('CREATE TABLE IF NOT EXISTS room_items_material (
+                id TEXT PRIMARY KEY,
+                room_item_id TEXT NOT NULL REFERENCES room_items(id),
+                name TEXT NOT NULL,
+
+                created_at DATETIME NOT NULL default current_timestamp,
+                archived_at DATETIME
+    )')
+
+    # type:
+    # 0 - pupil
+    # 1 - teacher
+    db.execute('CREATE TABLE IF NOT EXISTS room_items_comments (
+                id TEXT PRIMARY KEY,
+                room_item_id TEXT NOT NULL REFERENCES room_items(id),
+                user_id TEXT NOT NULL,
+                type INTEGER NOT NULL,
+                content TEXT NOT NULL,
+
+                created_at DATETIME NOT NULL default current_timestamp,
+                archived_at DATETIME
+    )')
     # user_id is null the invite has not been used
     # INVITE_STATE:
     # 0 - is pending
@@ -78,19 +110,59 @@ class Seeder
   def self.populate_tables
 
     password = hash_password("password123")
+    teacher_id = SecureRandom.uuid
 
     db.execute('INSERT INTO teachers (id,username,email,hashed_password) VALUES (?,?,?,?)', [
-      SecureRandom.uuid,
+      teacher_id,
       "teacher",
       "teacher@gmail.com",
       password
     ])
 
+    pupil_id = SecureRandom.uuid
+
+
     db.execute('INSERT INTO pupils (id,username,email,hashed_password) VALUES (?,?,?,?)', [
-      SecureRandom.uuid,
+      pupil_id,
       "pupil",
       "pupil@gmail.com",
       password
+    ])
+
+    room_id = SecureRandom.uuid
+
+    db.execute('INSERT INTO rooms (id,name) VALUES (?,?)', [
+      room_id,
+      "Room 1"
+    ])
+
+    room_item_id = SecureRandom.uuid
+
+    db.execute('INSERT INTO room_items (id,room_id,title,description) VALUES (?,?,?,?)', [
+      room_item_id,
+      room_id,
+      "Item 1",
+      "Description 1"
+    ])
+
+    db.execute('INSERT INTO room_items_material (id,room_item_id,name) VALUES (?,?,?)', [
+      SecureRandom.uuid,
+      room_item_id,
+      "Material 1"
+    ])
+
+    db.execute("INSERT INTO room_invites (id,room_id,user_id,invite_state) VALUES (?,?,?,?)", [
+      SecureRandom.uuid,
+      room_id,
+      pupil_id,
+      1
+    ])
+
+    db.execute("INSERT INTO room_invites (id,room_id,user_id,invite_state) VALUES (?,?,?,?)", [
+      SecureRandom.uuid,
+      room_id,
+      teacher_id,
+      3 
     ])
   end
 

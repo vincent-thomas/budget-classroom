@@ -39,29 +39,15 @@
     </header>
     <main class="p-3 overflow-scroll">
       <div class="flex flex-wrap justify-center gap-6">
-        <div class="border border-1 rounded w-[300px]">
-          <div class="border-b p-3 h-[120px] flex flex-col bg-blue-400">
-            <h1 class="text-2xl font-semibold text-white">Kemi</h1>
-            <p class="text-sm text-white">testing nice descritiopn</p>
-            <p class="text-md mt-auto text-white">Niklas börjesson</p>
-          </div>
-          <div class="p-2 flex justify-end gap-2">
-            <form method="POST" action="/api/classes/ignore-class/class_id">
-              <button class="hover:bg-gray-200 transition-[0.3s] rounded cursor-pointer font-semibold px-3 py-1">Ignore</button>
-            </form>
-            <form method="POST" action="/api/classes/join-class/class_id">
-              <button class="px-3 py-1 bg-blue-500 text-white font-semibold rounded cursor-pointer hover:bg-blue-600 transition-[0.3s]">Join</button>
-            </form>
-          </div>
-        </div>
-
-        <a class="border border-1 rounded w-[300px]" href="/classes/nice_class_id">
-          <div class="border-b p-3 h-[120px] flex flex-col bg-orange-400">
-            <h1 class="text-2xl font-semibold text-white">Matte</h1>
-            <p class="text-sm text-white">testing nice descritiopn</p>
-            <p class="text-md mt-auto text-white">Go lerare</p>
-          </div>
-        </a>
+        <% @classes.each do |class_data| %>
+          <a class="border border-1 rounded w-[300px]" href="/classes/<%= class_data["id"] %>">
+            <div class="border-b p-3 h-[120px] flex flex-col bg-blue-400">
+              <h1 class="text-2xl font-semibold text-white"><%= class_data["name"] %></h1>
+              <p class="text-sm text-white"><%= class_data["description"] %></p>
+              <p class="text-md mt-auto text-white"><%= class_data["teacher_name"] %></p>
+            </div>
+          </a>
+        <% end %>
       </div>
     </main>
     <%= render_component :footer %>
